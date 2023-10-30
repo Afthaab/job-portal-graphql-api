@@ -9,6 +9,8 @@ import (
 
 type UserService interface {
 	UserSignup(model.NewUser) (*model.User, error)
+	CreateCompany(model.NewComapany) (*model.Company, error)
+	ViewAllCompanies() ([]*model.Company, error)
 }
 
 type Service struct {

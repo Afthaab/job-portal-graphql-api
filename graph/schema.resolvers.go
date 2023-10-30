@@ -6,6 +6,7 @@ package graph
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/afthaab/job-portal-graphql/graph/model"
 )
@@ -15,7 +16,26 @@ func (r *mutationResolver) CreateSignup(ctx context.Context, input model.NewUser
 	return r.Svc.UserSignup(input)
 }
 
+// CreateNewCompany is the resolver for the createNewCompany field.
+func (r *mutationResolver) CreateNewCompany(ctx context.Context, input model.NewComapany) (*model.Company, error) {
+	return r.Svc.CreateCompany(input)
+}
+
+// ViewAllCompanies is the resolver for the viewAllCompanies field.
+func (r *queryResolver) ViewAllCompanies(ctx context.Context) ([]*model.Company, error) {
+	return r.Svc.ViewAllCompanies()
+}
+
+// ViewCompanyByID is the resolver for the viewCompanyById field.
+func (r *queryResolver) ViewCompanyByID(ctx context.Context, cid string) (*model.Company, error) {
+	panic(fmt.Errorf("not implemented: ViewCompanyByID - viewCompanyById"))
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+
 type mutationResolver struct{ *Resolver }
+type queryResolver struct{ *Resolver }

@@ -16,6 +16,25 @@ input NewUser{
   password: String!
 }
 
+input NewComapany{
+  name: String!
+  location: String!
+  salary: String!
+}
+
+type Company{
+  id: ID!
+  name: String!
+  location: String!
+  salary: String!
+}
+
+type Query{
+  viewAllCompanies: [Company!]!
+  viewCompanyById(Cid: ID!): Company!
+}
+
 type Mutation{
   createSignup(input:NewUser!): User!
+  createNewCompany(input:NewComapany!):Company!
 }

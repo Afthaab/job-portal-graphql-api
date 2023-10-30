@@ -2,6 +2,19 @@
 
 package model
 
+type Company struct {
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Location string `json:"location"`
+	Salary   string `json:"salary"`
+}
+
+type NewComapany struct {
+	Name     string `json:"name"`
+	Location string `json:"location"`
+	Salary   string `json:"salary"`
+}
+
 type NewUser struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
