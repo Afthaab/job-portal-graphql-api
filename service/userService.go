@@ -25,10 +25,8 @@ func (s *Service) UserSignup(userData model.NewUser) (*model.User, error) {
 		return nil, err
 	}
 
-	uid := strconv.FormatUint(uint64(userDetails.ID), 10)
-
 	return &model.User{
-		ID:        uid,
+		ID:        strconv.FormatUint(uint64(userDetails.ID), 10),
 		Username:  userDetails.Username,
 		Email:     userDetails.Email,
 		CreatedAt: userDetails.CreatedAt.Format("2006-01-02 15:04:05"),

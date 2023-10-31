@@ -11,6 +11,7 @@ type UserService interface {
 	UserSignup(model.NewUser) (*model.User, error)
 	CreateCompany(model.NewComapany) (*model.Company, error)
 	ViewAllCompanies() ([]*model.Company, error)
+	ViewCompanyById(cid string) (*model.Company, error)
 }
 
 type Service struct {

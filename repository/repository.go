@@ -15,6 +15,7 @@ type UserRepo interface {
 	CreateUser(userData models.User) (models.User, error)
 	CreateCompany(companyDetails models.Company) (models.Company, error)
 	ViewAllCompanies() ([]models.Company, error)
+	ViewCompanyID(cid string) (models.Company, error)
 }
 
 func NewRepository(db *gorm.DB) (UserRepo, error) {

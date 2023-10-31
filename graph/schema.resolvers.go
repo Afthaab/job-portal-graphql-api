@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/afthaab/job-portal-graphql/graph/model"
 )
@@ -28,7 +27,7 @@ func (r *queryResolver) ViewAllCompanies(ctx context.Context) ([]*model.Company,
 
 // ViewCompanyByID is the resolver for the viewCompanyById field.
 func (r *queryResolver) ViewCompanyByID(ctx context.Context, cid string) (*model.Company, error) {
-	panic(fmt.Errorf("not implemented: ViewCompanyByID - viewCompanyById"))
+	return r.Svc.ViewCompanyById(cid)
 }
 
 // Mutation returns MutationResolver implementation.

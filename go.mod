@@ -1,6 +1,6 @@
 module github.com/afthaab/job-portal-graphql
 
-go 1.18
+go 1.21.1
 
 require (
 	github.com/99designs/gqlgen v0.17.40

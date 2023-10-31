@@ -7,6 +7,15 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+func (r *Repo) ViewCompanyID(cid string) (models.Company, error) {
+	var companyDetails models.Company
+	result := r.DB.Where("id = ?", cid).First(&companyDetails)
+	if result.Error != nil {
+		return models.Company{}, errors.New("could not find the company in the records")
+	}
+	return companyDetails, nil
+}
+
 func (r *Repo) ViewAllCompanies() ([]models.Company, error) {
 	var companyDetails []models.Company
 	result := r.DB.Find(&companyDetails)

@@ -7,6 +7,21 @@ import (
 	newModel "github.com/afthaab/job-portal-graphql/models"
 )
 
+func (s *Service) ViewCompanyById(cid string) (*model.Company, error) {
+	userDetails, err := s.userRepo.ViewCompanyID(cid)
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Company{
+		ID:       strconv.FormatUint(uint64(userDetails.ID), 10),
+		Name:     userDetails.Name,
+		Location: userDetails.Location,
+		Salary:   userDetails.Salary,
+	}, nil
+
+}
+
 func (s *Service) ViewAllCompanies() ([]*model.Company, error) {
 	companies, err := s.userRepo.ViewAllCompanies()
 	if err != nil {
