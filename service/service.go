@@ -12,6 +12,8 @@ type UserService interface {
 	CreateCompany(model.NewComapany) (*model.Company, error)
 	ViewAllCompanies() ([]*model.Company, error)
 	ViewCompanyById(cid string) (*model.Company, error)
+	CreateJob(input model.NewJob) (*model.Job, error)
+	ViewJobById(jid string) (*model.Job, error)
 }
 
 type Service struct {

@@ -6,6 +6,7 @@ package graph
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/afthaab/job-portal-graphql/graph/model"
 )
@@ -20,6 +21,11 @@ func (r *mutationResolver) CreateNewCompany(ctx context.Context, input model.New
 	return r.Svc.CreateCompany(input)
 }
 
+// CreateJob is the resolver for the createJob field.
+func (r *mutationResolver) CreateJob(ctx context.Context, input model.NewJob) (*model.Job, error) {
+	return r.Svc.CreateJob(input)
+}
+
 // ViewAllCompanies is the resolver for the viewAllCompanies field.
 func (r *queryResolver) ViewAllCompanies(ctx context.Context) ([]*model.Company, error) {
 	return r.Svc.ViewAllCompanies()
@@ -30,6 +36,11 @@ func (r *queryResolver) ViewCompanyByID(ctx context.Context, cid string) (*model
 	return r.Svc.ViewCompanyById(cid)
 }
 
+// ViewJobsByID is the resolver for the viewJobsById field.
+func (r *queryResolver) ViewJobsByID(ctx context.Context, jid string) (*model.Job, error) {
+	return r.Svc.ViewJobById(jid)
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
@@ -38,3 +49,13 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *mutationResolver) CreateLogin(ctx context.Context, input model.NewJob) (*model.Job, error) {
+	panic(fmt.Errorf("not implemented: CreateLogin - createLogin"))
+}

@@ -15,3 +15,11 @@ type Company struct {
 	Location string `json:"location" validate:"required"`
 	Salary   string `json:"salary" validate:"required"`
 }
+
+type Jobs struct {
+	gorm.Model
+	Name    string  `json:"name"`
+	Type    string  `json:"type"`
+	Company Company `json:"Company" gorm:"ForeignKey:cid"`
+	Cid     uint    `json:"cid"`
+}
