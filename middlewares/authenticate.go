@@ -11,7 +11,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (m *Mid) Authenticate(next gin.HandlerFunc) gin.HandlerFunc {
+func (m *Mid) Authenticate() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
 
@@ -53,8 +53,6 @@ func (m *Mid) Authenticate(next gin.HandlerFunc) gin.HandlerFunc {
 		// Creates a new request with the updated context and assign it back to the gin context
 		req := c.Request.WithContext(ctx)
 		c.Request = req
-
-		next(c)
 
 	}
 }

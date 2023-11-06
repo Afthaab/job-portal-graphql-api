@@ -3,15 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"os"
 	"time"
 
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/rs/zerolog/log"
 
-	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/afthaab/job-portal-graphql/auth"
 	"github.com/afthaab/job-portal-graphql/database"
 	"github.com/afthaab/job-portal-graphql/graph"
@@ -20,29 +20,58 @@ import (
 	"github.com/afthaab/job-portal-graphql/service"
 )
 
-const defaultPort = "8080"
+const defaultPort = ":8080"
+
+func graphqlHandler(svc service.UserService) gin.HandlerFunc {
+	// NewExecutableSchema and Config are in the generated.go file
+	// Resolver is in the resolver.go file
+
+	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
+}
+
+func playgroundHandler() gin.HandlerFunc {
+	h := playground.Handler("GraphQL", "/query")
+
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
+}
 
 func main() {
-
-	svc, _, err := StartApp()
-	if err != nil {
-		log.Info().Err(err).Msg("error in startapp")
-	}
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
 
-	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{
-		Svc: svc,
-	}}))
+	svc, mid, err := StartApp()
+	if err != nil {
+		log.Info().Err(err).Msg("error in startapp")
+	}
 
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
+	// Setting up Gin
+	r := gin.Default()
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal().Err(http.ListenAndServe(":"+port, nil))
+	r.GET("/", playgroundHandler())
+
+	r.Use(mid.Log(), mid.Authenticate())
+	r.POST("/query", graphqlHandler(svc))
+	r.Run(port)
+
+	// srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{
+	// 	Svc: svc,
+	// }}))
+
+	// http.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	// http.Handle("/query", srv)
+
+	// log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
+	// log.Fatal().Err(http.ListenAndServe(":"+port, nil))
+
 }
 
 func StartApp() (service.UserService, middlewares.Mid, error) {
